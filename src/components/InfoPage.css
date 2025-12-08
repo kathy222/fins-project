@@ -1,0 +1,1012 @@
+/* === MODERN FISHBASE INFO PAGE CSS - ULTIMATE REFINEMENT V4 (MAX IMPRESSIVE) === */
+
+:root {
+    /* --- REFINED COLOR VARIABLES (Slightly more vibrant) --- */
+    --primary-blue: #091a32; /* Darker navy for contrast */
+    --accent-blue: #00bcd4; /* Bright Cyan/Turquoise for impact */
+    --light-blue: #45b6ff;
+    --dark-navy: #091a32;
+    
+    /* --- UPDATED CARD BG FOR TRANSPARENCY & STRONGER FROSTED EFFECT --- */
+    --card-bg: rgba(255, 255, 255, 0.75); /* More transparent (75%) */
+    --light-bg: rgba(245, 249, 252, 0.75); /* More transparent (75%) */
+    --frosted-blur: 15px; /* STRONGER blur */
+    
+    --text-dark: #121820; 
+    --text-medium: #3c4c66; 
+    --border-light: rgba(29, 114, 170, 0.1); 
+    --border-separator: #e1e7f0; 
+    --success-green: #10b981;
+    --warning-orange: #f59e0b;
+    --danger-red: #dc2626;
+
+    /* --- ENHANCED SHADOWS FOR MAX IMPRESSIVENESS --- */
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 15px 40px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.4);
+    /* INTENSE CYAN GLOW */
+    --shadow-blue-glow: 0 0 55px rgba(0, 188, 212, 0.9); 
+}
+
+/* === GLOBAL RESET (CRITICAL SCROLLING FIX) === */
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+}
+
+/* === CUSTOM FONTS (CRITICAL FOR TYPOGRAPHY) === */
+/* NOTE: Assuming 'Inter' and 'Jaldi' are loaded */
+.fins-title {
+    font-family: 'Inter', sans-serif;
+}
+.fins-subtitle {
+    font-family: 'Jaldi', sans-serif;
+}
+
+
+/* === KEYFRAME ANIMATIONS (RETAINED & REFINED) === */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 188, 212, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(0, 188, 212, 0.6); } /* Stronger cyan pulse */
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-7px); } 
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fillBar {
+    from { width: 0; }
+}
+
+/* NEW: Subtle texture animation for the overlay */
+@keyframes texturePan {
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
+}
+
+/* ======================================= */
+/* === HEADER STYLES (RESTORED ORIGINAL) === */
+/* ======================================= */
+
+.info-page-container .fins-header {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(135deg, 
+        var(--primary-blue),
+        var(--dark-navy)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    padding-left: 16px; 
+    padding-right: 16px; 
+
+    position: sticky;
+    top: 0;
+    z-index: 100; /* Increased z-index */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* Stronger shadow for floating effect */
+}
+
+/* Responsive Padding */
+@media (min-width: 640px) { 
+    .info-page-container .fins-header {
+        padding-left: 32px; 
+        padding-right: 32px; 
+    }
+}
+@media (min-width: 768px) { 
+    .info-page-container .fins-header {
+        padding-left: 52px; 
+        padding-right: 52px; 
+    }
+}
+
+
+.info-page-container .fins-logo-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 60px;
+    width: auto;
+}
+
+.info-page-container .fins-title-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-page-container .fins-title {
+    color: white;
+    font-size: 46px; /* Slightly larger for impact */
+    font-weight: 900; 
+    line-height: 1; 
+    letter-spacing: 3px; /* Wider spacing */
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.info-page-container .fins-subtitle {
+    color: #9ac2ef; 
+    font-size: 11px; /* Slightly larger subtitle */
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin: 4px 0 0 0;
+}
+
+.info-page-container .fins-logo-img {
+    position: relative;
+    left: 20px; /* More spacing */
+    width: 90px; /* Slightly larger */
+    height: 65px;
+    opacity: 0.9;
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.info-page-container .fins-logo-group:hover .fins-logo-img {
+    opacity: 1;
+    transform: rotate(-5deg) scale(1.05); /* Added slight rotation on hover */
+}
+
+.info-page-container .fins-home-btn-wrapper {
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+    border-radius: 50%;
+    padding: 15px; /* Larger hit area */
+    margin-right: -15px; 
+    outline: none; 
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0);
+}
+
+.info-page-container .fins-home-btn-wrapper:hover {
+    transform: scale(1.1); 
+    background-color: rgba(255, 255, 255, 0.15); 
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Subtle glow */
+}
+
+.info-page-container .fins-home-btn-wrapper:active {
+    transform: scale(0.95); 
+    background-color: rgba(255, 255, 255, 0.25); 
+}
+
+.info-page-container .fins-home-btn-img {
+    width: 32px;
+    height: 32px;
+}
+/* ======================================= */
+/* === END RESTORED HEADER STYLES === */
+/* ======================================= */
+
+
+/* === NEW: FLOATING BACK BUTTON STYLES === */
+
+.floating-back-btn {
+    position: fixed;
+    top: 130px;
+    left: 20px;
+    z-index: 1000; /* Ensure it's above everything */
+    
+    background: var(--primary-blue); /* Dark background */
+    border: 3px solid var(--accent-blue); /* Cyan border */
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.floating-back-btn:hover {
+    background: var(--dark-navy);
+    transform: scale(1.1) translateX(-5px);
+    box-shadow: var(--shadow-blue-glow); /* Intense cyan glow on hover */
+}
+.floating-back-btn:active {
+    transform: scale(0.95);
+}
+
+.floating-back-btn svg {
+    width: 25px;
+    height: 25px;
+    stroke: white;
+    stroke-width: 3;
+}
+
+/* RESPONSIVE ADJUSTMENT for mobile (move it off the edge) */
+@media (max-width: 768px) {
+    .floating-back-btn {
+        top: 115px; 
+        left: 10px;
+        width: 45px;
+        height: 45px;
+    }
+    .floating-back-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+/* === PAGE CONTAINER & BACKGROUND (IMAGE IMPLEMENTATION) === */
+
+.info-page-container {
+    height: auto; 
+    min-height: 100vh;
+    background-image: url('../assets/OCEAN7.jpeg'); 
+    background-size: cover; 
+    background-attachment: fixed;
+    background-position: 70% 30%; 
+    font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text-dark);
+    position: relative;
+    overflow-x: hidden; 
+    /* Applying slight contrast/brightness directly to the background image for sharpness */
+    filter: brightness(1.05) contrast(1.05); 
+}
+
+/* Animated Background Overlay - BRIGHTNESS & SHARPNESS FIX */
+.info-page-container::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    
+    background: 
+        /* Cyan radial gradient */
+        radial-gradient(circle at 10% 80%, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+        transparent; 
+    background-size: 500px 500px, 100% 100%;
+    animation: texturePan 120s linear infinite; 
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* === MAIN LAYOUT (RETAINED GRID) === */
+
+.main-content-grid {
+    width: 90%;
+    max-width: 1600px;
+    
+    margin: 0 auto;
+    
+    padding: 60px 0; 
+    display: grid;
+    grid-template-columns: 1fr 400px; 
+    gap: 40px; 
+    position: relative;
+    z-index: 1;
+}
+
+/* NEW: Abstract Graphic Element for Content Background */
+.main-content-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    /* Subtle cyan radial gradient/ripple centered behind the main content area */
+    background: radial-gradient(circle at 50% 10%, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        rgba(0, 188, 212, 0.15) 20%, /* Cyan ripple */
+        transparent 50%
+    );
+    opacity: 0.8;
+}
+
+
+/* === HERO SECTION (More pronounced floating effect) === */
+
+.hero-section {
+    background: var(--card-bg);
+    /* IMPRESSIVE ADDITION: FROSTED GLASS EFFECT */
+    backdrop-filter: blur(var(--frosted-blur));
+    -webkit-backdrop-filter: blur(var(--frosted-blur));
+    
+    border-radius: 20px;
+    padding: 40px; 
+    box-shadow: var(--shadow-lg); 
+    margin-bottom: 40px;
+    animation: fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+    border: 1px solid var(--border-separator); 
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.5s ease, transform 0.3s ease; /* Added transform transition */
+    z-index: 1; 
+}
+
+.hero-section:hover {
+    /* IMPRESSIVE ADDITION: Stronger, focused glow on hover, slight lift */
+    transform: translateY(-5px); 
+    box-shadow: var(--shadow-blue-glow);
+}
+
+/* NEW: Abstract Background Visual for Hero Section (More dramatic) */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(0, 188, 212, 0.2) 0%, transparent 70%); /* Cyan accent */
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 320px) 1fr; 
+    gap: 50px; 
+    align-items: flex-start; 
+    position: relative;
+    z-index: 1;
+}
+
+/* === IMAGE CONTAINER (FOR PHOTO OR FALLBACK) === */
+.image-container {
+    background: linear-gradient(135deg, #094760, var(--primary-blue));
+    border-radius: 20px; 
+    height: 300px; 
+    /* Updated glow pulse to use cyan accent */
+    box-shadow: 0 15px 40px rgba(0, 188, 212, 0.5); 
+    animation: float 12s ease-in-out infinite, glowPulse 6s ease-in-out infinite; 
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+}
+.image-container:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 20px 50px rgba(0, 188, 212, 0.7);
+}
+
+/* Image overlay for a 'wet' or premium look */
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 188, 212, 0.15); /* Cyan tint */
+    backdrop-filter: blur(1px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.fish-photo-actual {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    filter: brightness(1.1) contrast(1.05); 
+}
+
+/* Fish Common Name Enhancement - REFINED */
+.fish-common-name {
+    font-size: 60px; 
+    font-weight: 900;
+    /* Use strong cyan/navy gradient for text */
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 10px 0;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05); 
+}
+
+/* Scientific Name Enhancement - REFINED */
+.fish-scientific-name {
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-medium);
+    margin-bottom: 40px; 
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.fish-scientific-name.styled-name {
+    padding: 6px 14px; 
+    border-radius: 8px;
+    background: var(--light-bg); 
+    border: 2px solid var(--border-separator); 
+    color: var(--primary-blue);
+    font-weight: 700; 
+    box-shadow: var(--shadow-sm);
+}
+.fish-scientific-name.styled-name:hover {
+    background: rgba(0, 188, 212, 0.2); /* Cyan background tint on hover */
+    border-color: var(--accent-blue);
+}
+
+
+.description-box {
+    background: var(--light-bg); 
+    border-radius: 16px; 
+    padding: 25px;
+    border-left: 6px solid var(--accent-blue); /* Cyan accent line */
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1); 
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+    transition: all 0.3s ease;
+    z-index: 1; 
+}
+
+.description-box:hover {
+    box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3); /* Cyan shadow lift */
+    transform: translateX(2px);
+}
+
+/* === TABS SECTION (DYNAMIC UNDERLINE) === */
+
+.tabs-wrapper {
+    background: var(--card-bg);
+    /* IMPRESSIVE ADDITION: FROSTED GLASS EFFECT */
+    backdrop-filter: blur(var(--frosted-blur));
+    -webkit-backdrop-filter: blur(var(--frosted-blur));
+    
+    border-radius: 20px;
+    padding: 40px; 
+    box-shadow: var(--shadow-lg); 
+    border: 1px solid var(--border-separator);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    z-index: 1; 
+}
+
+.tabs-header {
+    display: flex;
+    gap: 15px; 
+    border-bottom: 1px solid var(--border-separator);
+    margin-bottom: 30px; 
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-medium);
+    font-weight: 600;
+    font-size: 16px; 
+    border-radius: 10px 10px 0 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    outline: none;
+}
+
+.tab-button::after { /* NEW: Dynamic Underline */
+    content: '';
+    position: absolute;
+    bottom: -1px; 
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    height: 4px; /* Thicker underline */
+    width: 100%;
+    background: var(--accent-blue);
+    transition: transform 0.3s ease;
+}
+
+.tab-button:hover {
+    color: var(--accent-blue);
+    background: rgba(0, 188, 212, 0.1); /* Cyan tint on hover */
+}
+
+.tab-button:focus-visible { 
+    outline: 3px solid var(--light-blue);
+    outline-offset: 4px;
+}
+
+.tab-active {
+    color: var(--primary-blue) !important;
+    background: var(--light-bg) !important;
+    font-weight: 700;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tab-active::after {
+    transform: translateX(-50%) scaleX(1); /* Active state underline */
+}
+
+/* === INFO CARDS (Enhanced Depth) === */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 25px; 
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-card {
+    background: var(--light-bg);
+    /* IMPRESSIVE ADDITION: FROSTED GLASS EFFECT */
+    backdrop-filter: blur(var(--frosted-blur));
+    -webkit-backdrop-filter: blur(var(--frosted-blur));
+
+    border: 1px solid var(--border-separator);
+    border-radius: 16px; 
+    padding: 25px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    position: relative; 
+    z-index: 1; 
+}
+
+.info-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: var(--shadow-md); 
+    border-color: var(--accent-blue);
+}
+
+.info-card h4 {
+    color: var(--primary-blue);
+    font-weight: 800; 
+    font-size: 20px; 
+    margin: 0 0 15px 0; 
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-separator); 
+}
+
+/* === DATA ROWS (Dynamic Hover - MAX IMPRESSIVE) === */
+
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0; /* Extra vertical padding */
+    border-bottom: 2px solid #cfd3da; /* Thicker dashed line */
+    font-size: 16px; 
+    transition: all 0.15s ease-out; /* FASTER TRANSITION for punchier feedback */
+    border-left: 5px solid transparent; /* Thicker highlight border */
+    padding-left: 0;
+}
+
+/* IMPRESSIVE ADDITION: Intense, quick, focused highlight */
+.data-row:hover {
+    /* Subtle Cyan Gradient for Background */
+    background: linear-gradient(90deg, rgba(0, 188, 212, 0.15) 0%, rgba(0, 188, 212, 0.05) 100%); 
+    padding-left: 15px; /* Deeper indent */
+    border-left: 5px solid var(--accent-blue); /* Intense cyan highlight */
+    border-radius: 4px;
+    transform: translateX(0px); /* Reset translate for clean hover */
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
+}
+
+.data-row-label {
+    color: var(--text-medium);
+    font-weight: 600; /* Bolder label */
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.data-row-value {
+    color: var(--text-dark);
+    font-weight: 700; /* Bolder value */
+    text-align: right;
+    max-width: 60%;
+    word-wrap: break-word; 
+}
+
+/* --- COMMON NAMES LIST STYLING (Subtle Elevation) --- */
+.common-names-list-wrapper {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-separator);
+    box-shadow: var(--shadow-sm);
+}
+
+.common-names-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border-separator);
+    padding-bottom: 6px;
+    display: block;
+}
+
+.common-names-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 15px; 
+    font-size: 14px;
+}
+
+.common-names-list li {
+    color: var(--text-dark);
+    padding: 2px 0;
+}
+
+
+/* === ENVIRONMENTAL TAGS (More prominent) === */
+
+.env-tags-container {
+    display: flex;
+    gap: 15px; 
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-separator); 
+}
+
+.env-tag {
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.env-tag-active {
+    padding: 10px 20px; 
+    border-radius: 25px;
+    font-size: 14px;
+    /* Use strong cyan gradient */
+    background: linear-gradient(135deg, var(--accent-blue), #2563eb); 
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
+}
+
+.env-tag-active:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 188, 212, 0.6);
+}
+
+.env-tag-inactive {
+    padding: 10px 20px; 
+    border-radius: 25px;
+    font-size: 14px;
+    background: var(--card-bg); 
+    color: var(--text-medium); 
+    opacity: 0.8; /* Increased opacity slightly to contrast with background */
+    border: 1px solid #cbd5e1;
+}
+
+/* === CATCHING METHODS PILLS (Refined) === */
+.other-methods-list-wrapper {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-separator);
+}
+
+.other-methods-label {
+    font-size: 14px;
+    color: var(--text-medium);
+    margin-bottom: 10px;
+    font-weight: 700;
+    display: block;
+}
+
+.other-methods-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+}
+
+.method-pill {
+    /* Updated pill background to cyan theme */
+    background: #e0f8ff;
+    color: var(--primary-blue);
+    padding: 8px 16px; 
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #bfdbfe;
+    white-space: nowrap;
+}
+
+.method-pill:hover {
+    transform: translateY(-2px);
+    background: #c0f4ff;
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+}
+
+
+/* === VULNERABILITY BARS (3D and High Contrast) === */
+
+.vulnerability-bar-wrapper {
+    margin-bottom: 25px; 
+    padding: 20px;
+    background: var(--card-bg); 
+    border-radius: 16px;
+    border: 1px solid var(--border-separator);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative; 
+    z-index: 1; 
+}
+
+.vulnerability-bar-wrapper:hover {
+    transform: scale(1.01); 
+    box-shadow: var(--shadow-md);
+}
+
+.vulnerability-bar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.vulnerability-label {
+    font-weight: 700;
+    flex-shrink: 0;
+    color: var(--primary-blue);
+}
+
+.vulnerability-bar-track {
+    flex-grow: 1;
+    height: 14px; 
+    background: #e9e9f0;
+    border-radius: 7px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); 
+    position: relative;
+    overflow: hidden;
+}
+
+.vulnerability-bar-fill {
+    height: 100%;
+    border-radius: 7px;
+    animation: fillBar 1.5s ease-out; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Subtle gradient on the fill bar for depth */
+.vulnerability-bar-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 50%);
+    border-radius: 7px;
+    opacity: 0.7;
+}
+
+
+.vulnerability-value {
+    font-weight: 800;
+    font-size: 18px; 
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.vulnerability-index {
+    font-size: 14px;
+    color: var(--text-medium);
+    margin: 8px 0 0 10px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* === SIDEBAR (Sticky and Elevated) === */
+
+.sidebar-column {
+    position: sticky;
+    top: 130px;
+    align-self: flex-start;
+    z-index: 1; 
+}
+
+.sidebar-card {
+    background: var(--card-bg);
+    /* IMPRESSIVE ADDITION: FROSTED GLASS EFFECT */
+    backdrop-filter: blur(var(--frosted-blur));
+    -webkit-backdrop-filter: blur(var(--frosted-blur));
+    
+    border-radius: 20px;
+    padding: 30px; 
+    box-shadow: var(--shadow-lg); 
+    border: 1px solid var(--border-separator);
+    transition: all 0.4s ease;
+    animation: fadeInUp 0.8s ease-out both;
+    margin-bottom: 25px; 
+    position: relative; 
+    z-index: 1; 
+}
+
+.sidebar-card:hover {
+    /* IMPRESSIVE ADDITION: Stronger, focused glow on hover */
+    transform: translateY(-4px); 
+    box-shadow: var(--shadow-blue-glow); 
+}
+
+.sidebar-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-blue);
+    margin: 0 0 20px 0; 
+    border-bottom: 2px solid var(--border-separator);
+    padding-bottom: 8px;
+}
+
+/* Map Section */
+.map-image-actual {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    background: #e5e7eb;
+    filter: saturate(1.2); 
+    transition: filter 0.3s ease;
+}
+.map-image-actual:hover {
+    filter: saturate(1.5) brightness(1.05);
+}
+
+.map-environment {
+    font-size: 14px;
+    color: var(--text-medium);
+    font-style: italic;
+    text-align: center;
+    padding: 8px 0;
+    background: var(--light-bg);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+
+.quick-facts-list {
+    color: var(--text-dark);
+    font-size: 15px;
+    line-height: 1.7;
+    border-left: 5px solid var(--accent-blue); 
+    padding-left: 15px;
+}
+
+/* IMPRESSIVE ADDITION: Quick facts hover (same as data row) */
+.quick-facts-list p {
+    margin: 6px 0; 
+    padding: 10px 12px; 
+    background: transparent;
+    border-radius: 4px;
+    transition: all 0.15s ease-out; /* FASTER TRANSITION for punchier feedback */
+    font-weight: 500;
+    border-left: 4px solid transparent; 
+    
+}
+
+.quick-facts-list p:hover {
+    /* Subtle Cyan Gradient for Background */
+    background: linear-gradient(90deg, rgba(0, 188, 212, 0.15) 0%, rgba(0, 188, 212, 0.05) 100%);
+    transform: translateX(6px); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--accent-blue);
+}
+
+
+/* === DESCRIPTION TAB STYLES === */
+.comments-text {
+    line-height: 1.8;
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 400;
+    position: relative;
+    z-index: 1; 
+}
+
+
+/* === RESPONSIVE DESIGN (Refined Breakpoints) === */
+
+@media (max-width: 1250px) {
+    .main-content-grid {
+        grid-template-columns: 1fr;
+        width: 94%;
+        padding: 40px 20px;
+        gap: 30px;
+    }
+    
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .sidebar-column {
+        position: static; 
+        top: auto;
+    }
+    
+    .image-container {
+        height: 300px; 
+        width: 100%;
+        margin: 0;
+    }
+    
+    .hero-section::after {
+        content: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content-grid {
+        padding: 20px 16px;
+    }
+    
+    .fins-logo-img {
+        left: 5px;
+        width: 60px;
+        height: 45px;
+    }
+
+    .fish-common-name {
+        font-size: 42px;
+    }
+    
+    .fish-scientific-name {
+        margin-bottom: 25px;
+    }
+
+    .tabs-wrapper {
+        padding: 25px;
+    }
+
+    .tabs-header {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .tab-button {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr; 
+    }
+    
+    .info-card {
+        padding: 20px;
+    }
+    
+    .data-row {
+        font-size: 15px;
+    }
+}

@@ -1,0 +1,284 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; 
+    width: 100%;
+}
+
+body {
+    overflow: hidden; 
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --border: 214.3 31.8% 91.4%; 
+}
+
+/* --- CENTRAL IMAGE ANIMATION --- */
+@keyframes closingLetters {
+    0% {
+        opacity: 0;
+        transform: translateX(var(--start-x)) scale(0.3) rotate(var(--start-rotate));
+        filter: blur(10px) brightness(2);
+    }
+    
+    70% {
+        opacity: 1;
+        transform: translateX(calc(var(--start-x) * 0.05)) scale(1.05) rotate(0deg);
+        filter: blur(0px) brightness(1.2);
+    }
+    
+    90% {
+        transform: translateX(calc(var(--start-x) * -0.01)) scale(0.98) rotate(0deg);
+        filter: blur(0px) brightness(1);
+    }
+    
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1) rotate(0deg);
+        filter: blur(0px) brightness(1);
+    }
+}
+
+/* Pulsating glow effect for central fish (Remains untouched as you want the fish glow) */
+@keyframes pulseGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 15px rgba(255, 120, 120, 0.8)) 
+                drop-shadow(0 0 30px rgba(255, 120, 120, 0.4))
+                drop-shadow(0 0 60px rgba(255, 80, 80, 0.2));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 25px rgba(255, 120, 120, 1.0)) 
+                drop-shadow(0 0 50px rgba(255, 120, 120, 0.8))
+                drop-shadow(0 0 90px rgba(255, 80, 80, 0.4));
+        transform: scale(1.02);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-15px) translateX(5px) rotate(1deg);
+    }
+    50% {
+        transform: translateY(-8px) translateX(-3px) rotate(-0.5deg);
+    }
+    75% {
+        transform: translateY(-12px) translateX(3px) rotate(0.5deg);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* REMOVED: @keyframes glow { ... } */
+/* REMOVED: @keyframes titleGlow { ... } */
+
+@keyframes letterBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* --- INTRO CONTAINER STYLES --- */
+.intro-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, rgba(0, 20, 40, 0.3), rgba(0, 0, 0, 0.8));
+}
+
+.intro-bg-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.intro-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    filter: brightness(0.6) contrast(1.2) saturate(1.1);
+    animation: slowZoom 30s infinite alternate ease-in-out;
+}
+
+@keyframes slowZoom {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* --- Central Image Style --- */
+.intro-fish-center {
+    width: 550px; 
+    height: auto;
+    object-fit: contain;
+    z-index: 10; 
+    animation: pulseGlow 4s infinite ease-in-out, float 8s infinite ease-in-out;
+    transition: transform 0.3s ease;
+}
+
+.intro-fish-center:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 40px rgba(255, 120, 120, 1.0));
+}
+
+/* --- FINS TITLE CONTAINER --- */
+.intro-title {
+    font-size: 165px; 
+    font-weight: 900; 
+    letter-spacing: 0.2em;
+    text-transform: uppercase; 
+    z-index: 20;
+    display: flex; 
+    gap: 0.1em;
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    perspective: 1000px;
+    text-shadow: none; 
+}
+
+
+.intro-color-light {
+    color: white;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 1) 25%,
+        rgba(200, 230, 255, 1) 50%,
+        rgba(255, 255, 255, 1) 75%,
+        rgba(255, 255, 255, 0.8) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+    /* Removed drop-shadow glow from F and S */
+    filter: none;
+    opacity: 0;
+}
+
+/* Inner letters (I & N) - Dark and STATIC */
+.intro-color-dark {
+    color: rgba(20, 1, 1, 1);
+    filter: none;
+    position: relative;
+    opacity: 1; 
+}
+
+.intro-color-dark::after {
+    content: attr(data-letter);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba(125, 174, 255, 0.3);
+    filter: blur(8px);
+    z-index: -1;
+}
+
+/* --- LETTER SPECIFIC ANIMATIONS (SLOWED & STATIC) --- */
+
+.letter-f {
+    --start-x: -100vw; 
+    --start-rotate: -180deg;
+    animation: closingLetters 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+               letterBounce 2s ease-in-out 5s infinite;
+    transform-origin: center;
+}
+
+.letter-i {
+    transform-origin: bottom center; 
+}
+
+.letter-n {
+    transform-origin: bottom center;
+}
+
+.letter-s {
+    --start-x: 100vw; 
+    --start-rotate: 180deg;
+    animation: closingLetters 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+               letterBounce 2s ease-in-out 5s infinite;
+    transform-origin: center;
+}
+
+
+/* Add sparkle effect to letters on hover */
+.intro-title span {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.intro-title span:hover {
+    transform: scale(1.1) translateY(-5px);
+    filter: none;
+}
+
+.letter-f, .letter-s {
+    animation: closingLetters 4.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+               letterBounce 2s ease-in-out 5s infinite;
+}
+
+.letter-i, .letter-n {
+    opacity: 1;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 768px) {
+    .intro-title {
+        font-size: 80px;
+    }
+    
+    .intro-fish-center {
+        width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-title {
+        font-size: 50px;
+        letter-spacing: 0.15em;
+    }
+    
+    .intro-fish-center {
+        width: 200px;
+    }
+}
+
+
+/* Add the base fadeInUp Keyframe (Used for I and N previously, kept for structure) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
