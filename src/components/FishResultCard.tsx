@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Button,
-  IconButton,
-  Chip,
-  Grid,
-} from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { Card, Typography, Box, Button, Grid } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface FishResultCardProps {
@@ -38,8 +28,6 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
   commonName,
   scientificName,
   imageUrl = "https://placehold.co/400x300/1a568b/ffffff?text=Fish",
-  statusLabel = "Stable",
-  rarityLabel = "Common",
   population = "N/A",
   region = "N/A",
   description,
@@ -52,207 +40,189 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
 
   const viewButtonGradient = "linear-gradient(90deg, #2AB4C3 0%, #10b981 100%)";
 
-  const getStatusColor = (status: string) => {
-    const statusMap: { [key: string]: string } = {
-      Stable: "#10b981", // Green
-      Declining: "#f59e0b", // Amber
-      Vulnerable: "#ef4444", // Red
-      Unknown: "#6b7280", // Gray
-    };
-    return statusMap[status] || "#6b7280";
-  };
-
   return (
     <Card
       sx={{
         borderRadius: 3,
-        boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)",
-        transition: "0.3s",
+        boxShadow: "0 6px 20px rgba(0, 0, 0, 0.5)",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         bgcolor: cardBg,
         color: titleColor,
-        border: "1px solid rgba(42, 180, 195, 0.1)",
-        width: "350px", // <<< MUST BE 100% to fit the Grid item width
-        height: "610px", // <<< REDUCED HEIGHT for proportionality
+        border: "1px solid rgba(42, 180, 195, 0.12)",
+        width: "100%",
+        maxWidth: "320px",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        mx: "auto",
+        position: "relative",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "4px",
+          background: "linear-gradient(90deg, #2AB4C3 0%, #10b981 100%)",
+          opacity: 0,
+          transition: "opacity 0.3s",
+        },
         "&:hover": {
-          boxShadow: "0 15px 30px rgba(0, 0, 0, 0.7)",
-          transform: "translateY(-5px)",
+          boxShadow:
+            "0 12px 32px rgba(42, 180, 195, 0.25), 0 0 0 1px rgba(42, 180, 195, 0.3)",
+          transform: "translateY(-6px)",
+          borderColor: "rgba(42, 180, 195, 0.3)",
+          "&::before": {
+            opacity: 1,
+          },
         },
       }}
     >
-      {/* 1. Image Section - Now uses a responsive aspect ratio */}
+      {/* Image Section */}
       <Box
         sx={{
           position: "relative",
           width: "100%",
-          aspectRatio: "4/3", // Set responsive aspect ratio for wider image
+          paddingTop: "68%",
           overflow: "hidden",
-          backgroundColor: "#374151",
-          borderTopLeftRadius: 3,
-          borderTopRightRadius: 3,
+          backgroundColor: "#1a2332",
           flexShrink: 0,
         }}
       >
         <Box
-          className="card-image"
           component="img"
           src={imageUrl}
           alt={commonName}
           sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            transition: "transform 0.3s ease",
+            transition: "transform 0.5s ease",
           }}
         />
-        <Chip
-          label={statusLabel}
-          size="medium"
+        {/* Gradient overlay for better text visibility */}
+        <Box
           sx={{
             position: "absolute",
-            top: 12,
-            right: 12,
-            backgroundColor: "#ffffff",
-            color: cardBg,
-            fontWeight: 600,
-            fontSize: "0.85rem",
-            height: 28,
-            borderRadius: "6px",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "40%",
+            background:
+              "linear-gradient(to top, rgba(31, 41, 55, 0.8) 0%, transparent 100%)",
+            pointerEvents: "none",
           }}
         />
       </Box>
 
-      {/* 2. Content Section - Now flexible height */}
+      {/* Content Section */}
       <Box
         sx={{
-          p: "20px", // Reduced padding slightly for compactness
+          p: 2.25,
           display: "flex",
           flexDirection: "column",
           bgcolor: cardBg,
-          flexShrink: 0,
-          flexGrow: 1, // Allow content to stretch if needed
+          flexGrow: 1,
+          gap: 1.5,
         }}
       >
-        {/* Title Section - Now flexible height */}
-        <Box
-          sx={{
-            mb: "16px", // Reduced margin
-            flexShrink: 0,
-          }}
-        >
-          <Box
+        {/* Title Section */}
+        <Box sx={{ flexShrink: 0, flexGrow: 0 }}>
+          <Typography
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: "12px",
-              mb: "6px", // Reduced margin
+              color: titleColor,
+              fontWeight: 800,
+              fontSize: "1.15rem",
+              lineHeight: 1.25,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: "vertical",
+              mb: 0.75,
+              height: "1.44em",
+              letterSpacing: "-0.01em",
             }}
           >
-            <Typography
-              sx={{
-                color: titleColor,
-                fontWeight: 700,
-                fontSize: "1.25rem", // Reduced font size for compactness
-                lineHeight: "28px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 1,
-                WebkitBoxOrient: "vertical",
-                height: "28px",
-              }}
-            >
-              {commonName}
-            </Typography>
-            <Chip
-              label={rarityLabel}
-              size="small"
-              sx={{
-                backgroundColor: infoBoxBg,
-                color: subtitleColor,
-                fontWeight: 600,
-                fontSize: "0.7rem", // Reduced font size
-                height: 22,
-                borderRadius: "6px",
-                flexShrink: 0,
-                px: 1,
-                mt: "3px", // Align chip slightly lower
-              }}
-            />
-          </Box>
+            {commonName}
+          </Typography>
+
           <Typography
             sx={{
               color: subtitleColor,
-              fontSize: "0.9rem",
+              fontSize: "0.88rem",
               fontStyle: "italic",
-              opacity: 0.9,
+              opacity: 0.8,
+              mb: 1.25,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              height: "20px",
-              mb: "6px",
+              height: "1.3em",
+              fontWeight: 400,
             }}
           >
             {scientificName}
           </Typography>
+
           <Typography
             sx={{
               color: subtitleColor,
-              fontSize: "0.9rem",
-              lineHeight: "20px",
+              fontSize: "0.83rem",
+              lineHeight: 1.6,
               overflow: "hidden",
-              textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: 2, // Allow max 2 lines for description
+              WebkitLineClamp: 3,
               WebkitBoxOrient: "vertical",
-              // Remove fixed height to allow wrapping up to 2 lines
-              mt: 1,
+              height: "3.99em",
+              opacity: 0.85,
+              fontWeight: 400,
+              wordBreak: "break-word",
             }}
           >
-            {description}
+            {description || "No description available."}
           </Typography>
         </Box>
 
-        {/* Info Boxes - Now flexible height */}
+        {/* Info Boxes */}
         <Box
           sx={{
-            mb: "16px", // Reduced margin
+            mt: "auto",
             flexShrink: 0,
-            mt: "auto", // Push the info boxes down
           }}
         >
-          <Grid
-            container
-            spacing={1.5} // Reduced spacing
-            sx={{ height: "100%", m: 0, width: "100%" }}
-          >
-            <Grid
-              item
-              xs={6}
-              sx={{ p: 0, pl: "0 !important", pt: "0 !important" }}
-            >
+          <Grid container spacing={1.25}>
+            <Grid item xs={6}>
               <Box
                 sx={{
                   bgcolor: infoBoxBg,
-                  p: "12px", // Reduced padding
+                  p: 1.5,
                   borderRadius: 2,
-                  height: "80px", // Set a compact fixed height for info boxes
+                  minHeight: "80px",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    bgcolor: "#323d52",
+                    borderColor: "rgba(42, 180, 195, 0.2)",
+                  },
                 }}
               >
                 <Typography
                   sx={{
-                    fontSize: "0.7rem",
+                    fontSize: "0.68rem",
                     color: subtitleColor,
-                    mb: "4px",
                     textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    fontWeight: 600,
+                    letterSpacing: "0.8px",
+                    fontWeight: 700,
+                    opacity: 0.7,
+                    lineHeight: 1,
+                    flexShrink: 0,
                   }}
                 >
                   Population
@@ -261,11 +231,14 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
                   sx={{
                     fontWeight: 700,
                     color: titleColor,
-                    fontSize: "1.2rem", // Reduced font size
+                    fontSize: "0.95rem",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    lineHeight: "24px",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    lineHeight: 1.3,
+                    mt: 0.5,
                   }}
                 >
                   {population}
@@ -273,31 +246,34 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
               </Box>
             </Grid>
 
-            <Grid
-              item
-              xs={6}
-              sx={{ p: 0, pr: "0 !important", pt: "0 !important" }}
-            >
+            <Grid item xs={6}>
               <Box
                 sx={{
                   bgcolor: infoBoxBg,
-                  p: "12px", // Reduced padding
+                  p: 1.5,
                   borderRadius: 2,
-                  height: "80px", // Set a compact fixed height for info boxes
+                  minHeight: "80px",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
-                  ml: "12px", // Adjusted margin to match new spacing
+                  justifyContent: "space-between",
+                  border: "1px solid rgba(255, 255, 255, 0.05)",
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    bgcolor: "#323d52",
+                    borderColor: "rgba(42, 180, 195, 0.2)",
+                  },
                 }}
               >
                 <Typography
                   sx={{
-                    fontSize: "0.7rem",
+                    fontSize: "0.68rem",
                     color: subtitleColor,
-                    mb: "4px",
                     textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    fontWeight: 600,
+                    letterSpacing: "0.8px",
+                    fontWeight: 700,
+                    opacity: 0.7,
+                    lineHeight: 1,
+                    flexShrink: 0,
                   }}
                 >
                   Region
@@ -306,11 +282,14 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
                   sx={{
                     fontWeight: 700,
                     color: titleColor,
-                    fontSize: "1.1rem", // Reduced font size
+                    fontSize: "0.95rem",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    lineHeight: "24px",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    lineHeight: 1.3,
+                    mt: 0.5,
                   }}
                 >
                   {region}
@@ -320,59 +299,41 @@ const FishResultCard: React.FC<FishResultCardProps> = ({
           </Grid>
         </Box>
 
-        {/* Action Buttons - Now flexible height */}
+        {/* Action Button */}
         <Box
           sx={{
-            display: "flex",
-            gap: "12px", // Reduced gap
             flexShrink: 0,
-            mt: "16px", // Space above buttons
+            mt: 0.5,
           }}
         >
-          <IconButton
-            sx={{
-              border: `1px solid ${infoBoxBg}`,
-              bgcolor: infoBoxBg,
-              color: subtitleColor,
-              width: "48px", // Reduced button size
-              height: "48px",
-              minWidth: "48px",
-              minHeight: "48px",
-              borderRadius: 2,
-              flexShrink: 0,
-              p: 0,
-              "&:hover": {
-                bgcolor: "#3c485c",
-                color: "#2AB4C3",
-              },
-            }}
-          >
-            <FavoriteBorderIcon fontSize="small" />
-          </IconButton>
-
           <Button
             onClick={onClick}
             fullWidth
-            endIcon={<ArrowForwardIcon sx={{ fontSize: 18 }} />}
+            endIcon={<ArrowForwardIcon sx={{ fontSize: 19 }} />}
             sx={{
-              height: "48px", // Reduced button height
-              minHeight: "48px",
-              maxHeight: "48px",
+              height: 46,
+              minHeight: 46,
               borderRadius: 2,
               background: viewButtonGradient,
               color: titleColor,
               fontWeight: 700,
               textTransform: "none",
-              fontSize: "1rem",
-              boxShadow: "0 4px 10px rgba(16, 185, 129, 0.4)",
-              p: "12px 24px",
+              fontSize: "0.98rem",
+              boxShadow: "0 4px 12px rgba(42, 180, 195, 0.25)",
+              transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+              border: "1px solid rgba(42, 180, 195, 0.3)",
               "&:hover": {
                 background: "linear-gradient(90deg, #10b981 0%, #2AB4C3 100%)",
-                boxShadow: "0 6px 15px rgba(16, 185, 129, 0.6)",
+                boxShadow: "0 6px 20px rgba(42, 180, 195, 0.45)",
+                transform: "translateY(-2px)",
+                borderColor: "rgba(42, 180, 195, 0.5)",
+              },
+              "&:active": {
+                transform: "translateY(0px)",
               },
             }}
           >
-            View
+            View Details
           </Button>
         </Box>
       </Box>

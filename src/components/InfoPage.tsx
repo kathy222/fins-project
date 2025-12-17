@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./InfoPage.css";
+import staticMapImageUrl from "../assets/map.jpg";
 import {
   Table,
   TableBody,
@@ -80,7 +81,6 @@ interface FishData {
   photo_url?: string;
 }
 
-// ** NEW HELPER COMPONENT: CommonNamesTable & getLanguageEmoji **
 interface CommonNameItem {
   common_name: string;
   language: string;
@@ -373,7 +373,6 @@ export default function InfoPage({
       "An oceanic species occurring above and below the thermoclines.",
     comments: "An oceanic species occurring above and below the thermoclines.",
 
-    // NEW EXTENDED DATA (populated by new API calls)
     genus_details: {
       diagnosis: "Body covered with very small scales...",
       etymology: "Greek, thynnos=tunna",
@@ -628,10 +627,6 @@ export default function InfoPage({
     }
   };
 
-  const mapImageUrl = `https://www.fishbase.de/images/map/popmap_${fishData.species_code}.gif`;
-
-  const placeholderMapUrl = `https://placehold.co/550x200/90b5d9/1a568b?text=Map+Unavailable+for+ID+${fishData.species_code}`;
-
   return (
     <div className="info-page-container">
       <button className="floating-back-btn" onClick={onGoBack}>
@@ -751,18 +746,12 @@ export default function InfoPage({
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="sidebar-column">
           <SidebarCard title="Distribution Map">
             <img
-              src={mapImageUrl}
-              alt={`Distribution map for ${fishData.common_name}`}
+              src={staticMapImageUrl}
+              alt="Global Distribution Map"
               className="map-image-actual"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = placeholderMapUrl;
-                target.onerror = null;
-              }}
             />
             <p className="map-environment">{fishData.preferred_environment}</p>
           </SidebarCard>

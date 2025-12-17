@@ -11,9 +11,12 @@ import {
   Fade,
   Chip,
   Grid,
+  Button,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import WavesIcon from "@mui/icons-material/Waves";
+
+import ErrorImage from "../assets/404image.png";
 
 // ============================================
 // CORS PROXY HELPER
@@ -195,7 +198,6 @@ export default function FishSearch({
       fetchAndParse(classCode ? buildApiUrl(`/class/${classCode}`) : null),
     ]);
 
-    // --- Determine Photo URL ---
     const photoUrl = `https://www.fishbase.de/images/species/${data.species_code}.gif`;
 
     const fishInfo: FishData = {
@@ -619,6 +621,15 @@ export default function FishSearch({
     </div>
   );
 
+  const handleGoBackToSearch = () => {
+    setError(null);
+    setQuery("");
+    setSearchResultsList([]);
+    if (randomFishList.length === 0) {
+      fetchRandomFishData();
+    }
+  };
+
   return (
     <div className="ocean-bg">
       <header className="fins-header header-no-search">
@@ -648,374 +659,471 @@ export default function FishSearch({
           </svg>
         </a>
       </header>
-      <Box className="hero-search-wrapper">
-        <Typography
-          variant="h3"
-          component="h2"
-          sx={{
-            fontWeight: 900,
-            fontSize: { xs: "1.5rem", sm: "2.5rem" },
-            color: "#ffffff",
-            letterSpacing: "-1px",
-            mb: 0,
-          }}
-        >
-          Explore the
-        </Typography>
-        <Typography
-          variant="h3"
-          component="h2"
-          sx={{
-            fontWeight: 900,
-            fontSize: { xs: "2.5rem", sm: "2.5rem" },
-            background:
-              "linear-gradient(90deg, #194956 0%, #194956 11.1%, #2AB4C3 44.4%, #3BC1F2 70%,#55ADF8 50%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            letterSpacing: "-1px",
-            mb: 2,
-          }}
-        >
-          Ocean's Wonders
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            color: "#c8d2e8",
-            maxWidth: 800,
-            mx: "auto",
-            mb: 4,
-            fontSize: { xs: "2rem", sm: "1rem" },
-            fontWeight: 400,
-          }}
-        >
-          Discover comprehensive data on marine life, population dynamics, and
-          conservation status of aquatic species worldwide.
-        </Typography>
 
-        <Box className="centered-search-container">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Search ID, Scientific Name, Genus, or Common Name"
-            className="search-input centered-search-input"
-            disabled={isLoading}
+      {error ? (
+        <Box
+          sx={{
+            minHeight: "calc(100vh - 100px)",
+            width: "100%",
+            position: "relative",
+            overflow: "hidden",
+            backgroundImage: `url(${ErrorImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          {/* Dark overlay for readability */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.4)",
+              zIndex: 1,
+            }}
           />
-          <button
-            onClick={handleSearch}
-            className="search-button centered-search-button"
-            disabled={isLoading}
+
+          <Box
+            sx={{
+              maxWidth: 900,
+              position: "absolute",
+              top: { xs: "100px", md: "20px" },
+              right: { xs: "20px", md: "50px" },
+              textAlign: "center",
+              zIndex: 2,
+              p: 3,
+            }}
           >
-            <SearchIcon sx={{ fontSize: 32, color: "white" }} />
-          </button>
+            <Fade in>
+              <Alert
+                severity="error"
+                sx={{
+                  borderRadius: 4,
+                  boxShadow: 8,
+                  width: "100%",
+                  backgroundColor: "#dc262698",
+                  color: "white",
+                  fontSize: "1.2rem",
+                  "& .MuiAlert-message": { fontWeight: 700, color: "white" },
+                  "& .MuiAlert-icon": { fontSize: 30, color: "white" },
+                }}
+              >
+                {error}
+              </Alert>
+            </Fade>
+          </Box>
+
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "100px",
+              left: "50%",
+              transform: "translateX(-50%)", // Pull back 50% of its own width to center
+              zIndex: 2,
+            }}
+          >
+            <Button
+              onClick={handleGoBackToSearch}
+              variant="contained"
+              size="large"
+              sx={{
+                py: 1.5,
+                px: 4,
+                mt: 3,
+                borderRadius: 3,
+                fontWeight: 700,
+                textTransform: "none",
+                fontSize: "1.05rem",
+                background: "linear-gradient(90deg, #00bcd4 0%, #009688 100%)",
+                color: "white",
+                boxShadow: "0 6px 25px rgba(0, 188, 212, 0.8)",
+                "&:hover": {
+                  background:
+                    "linear-gradient(90deg, #009688 0%, #00bcd4 100%)",
+                  boxShadow: "0 8px 30px rgba(0, 188, 212, 1)",
+                },
+              }}
+            >
+              Return to Search Page
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          py: 4,
-          px: { xs: 2, sm: 4, md: 8 },
-        }}
-      >
-        {searchResultsList.length === 0 && !error && (
-          <Fade in timeout={800}>
-            <Box>
-              <Box sx={{ maxWidth: "1500px", mx: "auto", mb: 4 }}>
-                <AdvancedSearchForm
-                  onSearch={advancedSearchDatabase}
-                  onSearchStart={() => {
-                    setIsLoading(true);
-                    setSearchResultsList([]);
-                  }}
-                  onError={setError}
-                />
-              </Box>
+      ) : (
+        // === NORMAL SEARCH PAGE VIEW ---
+        <>
+          {/* Hero Section (Ocean's Wonders, Search Bar) */}
+          <Box className="hero-search-wrapper">
+            <Typography
+              variant="h3"
+              component="h2"
+              sx={{
+                fontWeight: 900,
+                fontSize: { xs: "1.5rem", sm: "2.5rem" },
+                color: "#ffffff",
+                letterSpacing: "-1px",
+                mb: 0,
+              }}
+            >
+              Explore the
+            </Typography>
+            <Typography
+              variant="h3"
+              component="h2"
+              sx={{
+                fontWeight: 900,
+                fontSize: { xs: "2.5rem", sm: "2.5rem" },
+                background:
+                  "linear-gradient(90deg, #194956 0%, #194956 11.1%, #2AB4C3 44.4%, #3BC1F2 70%,#55ADF8 50%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                letterSpacing: "-1px",
+                mb: 2,
+              }}
+            >
+              Ocean's Wonders
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: "#c8d2e8",
+                maxWidth: 800,
+                mx: "auto",
+                mb: 4,
+                fontSize: { xs: "2rem", sm: "1rem" },
+                fontWeight: 400,
+              }}
+            >
+              Discover comprehensive data on marine life, population dynamics,
+              and conservation status of aquatic species worldwide.
+            </Typography>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  my: 5,
-                  "&::before, &::after": {
-                    content: '""',
-                    flex: 1,
-                    borderBottom: "2px dashed",
-                    borderColor: "divider",
-                  },
-                }}
+            <Box className="centered-search-container">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Search ID, Scientific Name, Genus, or Common Name"
+                className="search-input centered-search-input"
+                disabled={isLoading}
+              />
+              <button
+                onClick={handleSearch}
+                className="search-button centered-search-button"
+                disabled={isLoading}
               >
-                <WavesIcon sx={{ color: "#00bcd4", fontSize: 32 }} />
-              </Box>
-
-              <Box
-                sx={{
-                  mb: 4,
-                  pl: { xs: 0, sm: 15 },
-                  pr: { xs: 0, sm: 15 },
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    gap: 1,
-                    mb: 3,
-                    px: 0,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Box
-                      sx={{
-                        width: 5,
-                        height: 30,
-                        bgcolor: "#288590ff",
-                        borderRadius: 1,
-                        ml: 0,
+                <SearchIcon sx={{ fontSize: 32, color: "white" }} />
+              </button>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              py: 4,
+              px: { xs: 2, sm: 4, md: 8 },
+            }}
+          >
+            {searchResultsList.length === 0 && !error && (
+              <Fade in timeout={800}>
+                <Box>
+                  <Box sx={{ maxWidth: "1500px", mx: "auto", mb: 4 }}>
+                    <AdvancedSearchForm
+                      onSearch={advancedSearchDatabase}
+                      onSearchStart={() => {
+                        setIsLoading(true);
+                        setSearchResultsList([]);
                       }}
-                    />
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        fontWeight: 900,
-                        color: "#ffffff",
-                        letterSpacing: "-0.5px",
-                      }}
-                    >
-                      Featured Species
-                    </Typography>
-                    <Chip
-                      label={`${randomFishList.length} Species`}
-                      size="small"
-                      sx={{
-                        bgcolor: "#2AB4C3",
-                        color: "white",
-                        fontWeight: 600,
-                      }}
+                      onError={setError}
                     />
                   </Box>
 
-                  <Typography
-                    variant="body1"
+                  <Box
                     sx={{
-                      color: "#b7bbc4ff",
-                      fontSize: "1.1rem",
-                      ml: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      my: 5,
+                      "&::before, &::after": {
+                        content: '""',
+                        flex: 1,
+                        borderBottom: "2px dashed",
+                        borderColor: "divider",
+                      },
                     }}
                   >
-                    Dive into detailed profiles of remarkable aquatic creatures
-                  </Typography>
+                    <WavesIcon sx={{ color: "#00bcd4", fontSize: 32 }} />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      mb: 4,
+                      pl: { xs: 0, sm: 15 },
+                      pr: { xs: 0, sm: 15 },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: 1,
+                        mb: 3,
+                        px: 0,
+                      }}
+                    >
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Box
+                          sx={{
+                            width: 5,
+                            height: 30,
+                            bgcolor: "#288590ff",
+                            borderRadius: 1,
+                            ml: 0,
+                          }}
+                        />
+                        <Typography
+                          variant="h4"
+                          sx={{
+                            fontWeight: 900,
+                            color: "#ffffff",
+                            letterSpacing: "-0.5px",
+                          }}
+                        >
+                          Featured Species
+                        </Typography>
+                        <Chip
+                          label={`${randomFishList.length} Species`}
+                          size="small"
+                          sx={{
+                            bgcolor: "#2AB4C3",
+                            color: "white",
+                            fontWeight: 600,
+                          }}
+                        />
+                      </Box>
+
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: "#b7bbc4ff",
+                          fontSize: "1.1rem",
+                          ml: 1,
+                        }}
+                      >
+                        Dive into detailed profiles of remarkable aquatic
+                        creatures
+                      </Typography>
+                    </Box>
+                    {isRandomLoading ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          py: 8,
+                          gap: 2,
+                        }}
+                      >
+                        <CircularProgress size={48} sx={{ color: "#00bcd4" }} />
+                        <Typography
+                          color="text.secondary"
+                          sx={{ fontWeight: 500 }}
+                        >
+                          Loading featured fish...
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Grid
+                        container
+                        spacing={3}
+                        sx={{
+                          maxWidth: "100%",
+                          mx: 0,
+                          width: "100%",
+                        }}
+                      >
+                        {randomFishList.map((fish, index) => {
+                          const currentStatus = fish.class.includes(
+                            "Osteichthyes"
+                          )
+                            ? "Stable"
+                            : "Vulnerable";
+                          const currentRarity = fish.family.includes("idae")
+                            ? "Common"
+                            : "Rare";
+
+                          const currentOrder = fish.order || "N/A";
+                          const currentEnvironment = fish.environment || "N/A";
+
+                          return (
+                            <Grid
+                              item
+                              xs={12}
+                              sm={6}
+                              md={3}
+                              lg={3}
+                              xl={3}
+                              key={`${fish.id}-${index}`}
+                              sx={{
+                                display: "flex",
+                                minWidth: 0,
+                              }}
+                            >
+                              <Fade in timeout={300 + index * 100}>
+                                <Box sx={{ width: "100%", height: "100%" }}>
+                                  <FishResultCard
+                                    commonName={fish.common_name}
+                                    scientificName={fish.scientific_name}
+                                    typeLabel={
+                                      fish.common_name.split(" ")[0] ||
+                                      fish.family
+                                    }
+                                    taxonomy={{
+                                      class: fish.class,
+                                      order: fish.order,
+                                      family: fish.family,
+                                    }}
+                                    habitatInfo={{
+                                      maxDepth: fish.max_depth,
+                                      environment: fish.environment,
+                                    }}
+                                    imageUrl={fish.photo_url}
+                                    statusLabel={currentStatus}
+                                    rarityLabel={currentRarity}
+                                    population={currentOrder}
+                                    region={currentEnvironment}
+                                    description={fish.description}
+                                    onClick={() => {
+                                      setIsLoading(true);
+                                      fetchSpeciesDetails(
+                                        fish.id,
+                                        fish.common_name
+                                      );
+                                    }}
+                                  />
+                                </Box>
+                              </Fade>
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    )}
+                  </Box>
                 </Box>
-                {isRandomLoading ? (
+              </Fade>
+            )}
+            {searchResultsList.length > 0 && (
+              <Fade in timeout={500}>
+                <Box>
+                  <Box sx={{ mb: 4 }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 800,
+                        color: "#004d40",
+                        mb: 1,
+                        letterSpacing: "-0.5px",
+                      }}
+                    >
+                      Πολλαπλά Αποτελέσματα Βρέθηκαν
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      sx={{ mb: 3 }}
+                    >
+                      Παρακαλώ επιλέξτε το είδος που θέλετε να δείτε αναλυτικά:
+                    </Typography>
+
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
+                      {searchResultsList.map((result, index) => (
+                        <Fade in timeout={200 + index * 50} key={result.id}>
+                          <Box
+                            onClick={() => {
+                              setQuery(result.id.toString());
+                              setIsLoading(true);
+                              fetchSpeciesDetails(
+                                result.id,
+                                result.common_name
+                              );
+                            }}
+                            sx={{
+                              p: 3,
+                              borderRadius: 2,
+                              bgcolor: "white",
+                              boxShadow: 2,
+                              cursor: "pointer",
+                              transition: "all 0.3s",
+                              borderLeft: "4px solid #00bcd4",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              "&:hover": {
+                                boxShadow: 6,
+                                transform: "translateX(8px)",
+                                borderLeftColor: "#004d40",
+                              },
+                            }}
+                          >
+                            <Box>
+                              <Typography
+                                variant="h6"
+                                sx={{ fontWeight: 700, color: "#004d40" }}
+                              >
+                                {result.common_name || "N/A"}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                sx={{ fontStyle: "italic" }}
+                              >
+                                {result.scientific_name || "N/A"}
+                              </Typography>
+                            </Box>
+                            <SearchIcon sx={{ color: "#00bcd4" }} />
+                          </Box>
+                        </Fade>
+                      ))}
+                    </Box>
+                  </Box>
+                </Box>
+              </Fade>
+            )}
+            <Box sx={{ minHeight: "150px", mt: 3 }}>
+              {isLoading && (
+                <Fade in>
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      py: 8,
+                      py: 6,
                       gap: 2,
                     }}
                   >
-                    <CircularProgress size={48} sx={{ color: "#00bcd4" }} />
-                    <Typography color="text.secondary" sx={{ fontWeight: 500 }}>
-                      Loading featured fish...
+                    <CircularProgress size={56} sx={{ color: "#00bcd4" }} />
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "#004d40", fontWeight: 600 }}
+                    >
+                      🌊 Λήψη πλήρων δεδομένων από το FishBase...
                     </Typography>
                   </Box>
-                ) : (
-                  <Grid
-                    container
-                    spacing={3}
-                    sx={{
-                      maxWidth: "100%",
-                      mx: 0,
-                      width: "100%",
-                    }}
-                  >
-                    {randomFishList.map((fish, index) => {
-                      const currentStatus = fish.class.includes("Osteichthyes")
-                        ? "Stable"
-                        : "Vulnerable";
-                      const currentRarity = fish.family.includes("idae")
-                        ? "Common"
-                        : "Rare";
+                </Fade>
+              )}
 
-                      const currentOrder = fish.order || "N/A";
-                      const currentEnvironment = fish.environment || "N/A";
-
-                      return (
-                        <Grid
-                          item
-                          xs={12}
-                          sm={6}
-                          md={3}
-                          lg={3}
-                          xl={3}
-                          key={`${fish.id}-${index}`}
-                          sx={{
-                            display: "flex",
-                            minWidth: 0,
-                          }}
-                        >
-                          <Fade in timeout={300 + index * 100}>
-                            <Box sx={{ width: "100%", height: "100%" }}>
-                              <FishResultCard
-                                commonName={fish.common_name}
-                                scientificName={fish.scientific_name}
-                                typeLabel={
-                                  fish.common_name.split(" ")[0] || fish.family
-                                }
-                                taxonomy={{
-                                  class: fish.class,
-                                  order: fish.order,
-                                  family: fish.family,
-                                }}
-                                habitatInfo={{
-                                  maxDepth: fish.max_depth,
-                                  environment: fish.environment,
-                                }}
-                                imageUrl={fish.photo_url}
-                                statusLabel={currentStatus}
-                                rarityLabel={currentRarity}
-                                population={currentOrder}
-                                region={currentEnvironment}
-                                description={fish.description}
-                                onClick={() => {
-                                  setIsLoading(true);
-                                  fetchSpeciesDetails(
-                                    fish.id,
-                                    fish.common_name
-                                  );
-                                }}
-                              />
-                            </Box>
-                          </Fade>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                )}
-              </Box>
+              {/* Note: The main error display is now handled by the conditional block above */}
             </Box>
-          </Fade>
-        )}
-        {searchResultsList.length > 0 && (
-          <Fade in timeout={500}>
-            <Box>
-              <Box sx={{ mb: 4 }}>
-                <Typography
-                  variant="h4"
-                  sx={{
-                    fontWeight: 800,
-                    color: "#004d40",
-                    mb: 1,
-                    letterSpacing: "-0.5px",
-                  }}
-                >
-                  Πολλαπλά Αποτελέσματα Βρέθηκαν
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  sx={{ mb: 3 }}
-                >
-                  Παρακαλώ επιλέξτε το είδος που θέλετε να δείτε αναλυτικά:
-                </Typography>
-
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {searchResultsList.map((result, index) => (
-                    <Fade in timeout={200 + index * 50} key={result.id}>
-                      <Box
-                        onClick={() => {
-                          setQuery(result.id.toString());
-                          setIsLoading(true);
-                          fetchSpeciesDetails(result.id, result.common_name);
-                        }}
-                        sx={{
-                          p: 3,
-                          borderRadius: 2,
-                          bgcolor: "white",
-                          boxShadow: 2,
-                          cursor: "pointer",
-                          transition: "all 0.3s",
-                          borderLeft: "4px solid #00bcd4",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          "&:hover": {
-                            boxShadow: 6,
-                            transform: "translateX(8px)",
-                            borderLeftColor: "#004d40",
-                          },
-                        }}
-                      >
-                        <Box>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontWeight: 700, color: "#004d40" }}
-                          >
-                            {result.common_name || "N/A"}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ fontStyle: "italic" }}
-                          >
-                            {result.scientific_name || "N/A"}
-                          </Typography>
-                        </Box>
-                        <SearchIcon sx={{ color: "#00bcd4" }} />
-                      </Box>
-                    </Fade>
-                  ))}
-                </Box>
-              </Box>
-            </Box>
-          </Fade>
-        )}
-        <Box sx={{ minHeight: "150px", mt: 3 }}>
-          {isLoading && (
-            <Fade in>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  py: 6,
-                  gap: 2,
-                }}
-              >
-                <CircularProgress size={56} sx={{ color: "#00bcd4" }} />
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#004d40", fontWeight: 600 }}
-                >
-                  🌊 Λήψη πλήρων δεδομένων από το FishBase...
-                </Typography>
-              </Box>
-            </Fade>
-          )}
-
-          {error && (
-            <Fade in>
-              <Alert
-                severity="error"
-                sx={{
-                  borderRadius: 2,
-                  boxShadow: 2,
-                  "& .MuiAlert-message": {
-                    fontWeight: 500,
-                  },
-                }}
-              >
-                {error}
-              </Alert>
-            </Fade>
-          )}
-        </Box>
-      </Box>
+          </Box>
+        </>
+      )}
     </div>
   );
 }

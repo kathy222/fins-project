@@ -14,7 +14,6 @@
 }
 
 
-/* 1. Background for the component container - IMPLEMENTING THE NEW DARK GRADIENT */
 html, body {
     margin: 0;
     padding: 0;
@@ -24,9 +23,7 @@ html, body {
 .ocean-bg {
     min-height: 100vh; 
     height: auto; 
-    /* ------------------------------------------------------------------ */
-    /* *** NEW DARK GRADIENT IMPLEMENTATION (Adjusted for image dark blue) *** */
-    /* Using linear-gradient with the requested colors for a deep-sea effect */
+  
     background: linear-gradient(
         to bottom,
         #0C1629 0%,   /* Start with a deep dark blue-black */
@@ -34,13 +31,9 @@ html, body {
         #1A253A 70%,  /* Transition to a slightly lighter, rich blue */
         #1B263B 100%  /* End with a darker blue/gray */
     );
-    /* Set main text color to white for contrast against the dark background */
     color: #f0f7ff; 
-    /* ------------------------------------------------------------------ */
 }
-/* 2. Styling for the input field (REVERTING TO DARK THEME FOR CONTRAST) */
 .search-input {
-  /* Using specific colors for the dark theme input */
   border-color: #4a5568 !important; /* Muted border for dark background */
   background-color: #1c2636 !important; /* Very dark input field background */
   color: white !important; /* White text for contrast */
@@ -51,9 +44,6 @@ html, body {
     color: #8b95a8; /* Lighter placeholder text */
 }
 
-/* 3. Styling for the search button (RETAINED ACCENT COLOR) */
-/* (Keeping this generic search-button style in case it's used elsewhere, 
-   but centered-search-button will be customized.) */
 .search-button {
   background-color: #3b82f6; /* Bright blue color */
   transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
@@ -69,18 +59,15 @@ html, body {
   cursor: pointer;
 }
 
-/* Button disabled state  */
 .search-button:disabled {
   background-color: #4a5568; 
   cursor: not-allowed;
   opacity: 0.8;
 }
 
-/* --- RESTORED ORIGINAL HEADER STYLES (No search bar) --- */
 .fins-header {
     width: 100%;
     height: 100px;
-    /* Header retains original dark look (no gradient change) */
     background: linear-gradient(135deg, 
         var(--primary-blue),
         var(--dark-navy)
@@ -300,16 +287,13 @@ html, body {
     );
 }
 
-/* ****************************************************** */
-/* *** MODIFIED SEARCH BAR STYLES TO MATCH IMAGE *** */
-/* ****************************************************** */
+
 .centered-search-container {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 800px; 
     
-    /* 1. Gradient border/background for the entire container */
     padding: 1px; /* Very thin border around the input */
     margin: 0 auto;
     border-radius: 12px; /* Slight curve */
