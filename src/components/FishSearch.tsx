@@ -22,10 +22,9 @@ import ErrorImage from "../assets/404image.png";
 // CORS PROXY HELPER
 // ============================================
 const buildApiUrl = (endpoint: string): string => {
-  const baseUrl = "https://demos.isl.ics.forth.gr/semantyfish-api/resources";
-  const fullUrl = `${baseUrl}${endpoint}`;
-  // Using a CORS proxy
-  return `https://corsproxy.io/?${encodeURIComponent(fullUrl)}`;
+  // Αλλάζουμε το https σε http για να ταιριάζει με τον server του καθηγητή
+  const baseUrl = "http://demos.isl.ics.forth.gr/semantyfish-api/resources";
+  return `${baseUrl}${endpoint}`;
 };
 
 // --- INTERFACES ---
@@ -960,13 +959,8 @@ export default function FishSearch({
 
                           return (
                             <Grid
-                              item
-                              xs={12}
-                              sm={6}
-                              md={3}
-                              lg={3}
-                              xl={3}
                               key={`${fish.id}-${index}`}
+                              size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 3 }}
                               sx={{
                                 display: "flex",
                                 minWidth: 0,

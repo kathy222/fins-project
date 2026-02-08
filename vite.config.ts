@@ -1,39 +1,22 @@
 // vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-console.log('🔧 Vite config loaded!');
 
 export default defineConfig({
   plugins: [react()],
-  base: '/FINS/',  // ✅ Πρόσθεσε αυτό για το base path
+  
+  // ✅ Ορίζουμε το base path όπως το ζήτησε ο καθηγητής.
+  // Αυτό σημαίνει ότι το site θα αναζητά τα αρχεία του στο /FINS/
+  base: '/FINS/', 
+
   server: {
-    port: 5137,    // ✅ Πρόσθεσε το port
-    proxy: {
-      '/api/resources': {
-        target: 'https://demos.isl.ics.forth.gr',
-        changeOrigin: true,
-        
-        rewrite: (path) => {
-          const newPath = path.replace(/^\/api\/resources/, '/semantyfish-api/resources');
-          console.log(`Proxying: ${path} -> ${newPath}`);
-          return newPath;
-        },
-        secure: false,
-        
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('proxy error', err);
-          });
-          
-          proxy.on('proxyReq', (_proxyReq, req, _res) => {
-            console.log('Sending Request:', req.method, req.url);
-          });
-          
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Received Response:', proxyRes.statusCode, req.url);
-          });
-        },
-      },
-    },
+    // ✅ Το σωστό port σύμφωνα με το link που σου έδωσε
+    port: 5173, 
+    host: true,
   },
+
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  }
 })

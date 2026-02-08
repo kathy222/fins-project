@@ -19,11 +19,10 @@ import TuneIcon from "@mui/icons-material/Tune";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const buildApiUrl = (endpoint: string): string => {
-  const baseUrl = "https://demos.isl.ics.forth.gr/semantyfish-api/resources";
-  const fullUrl = `${baseUrl}${endpoint}`;
-  return `https://corsproxy.io/?${encodeURIComponent(fullUrl)}`;
+  // Αλλάζουμε το https σε http για να ταιριάζει με τον server του καθηγητή
+  const baseUrl = "http://demos.isl.ics.forth.gr/semantyfish-api/resources";
+  return `${baseUrl}${endpoint}`;
 };
-
 interface TerminologyData {
   id: number;
   name: string;

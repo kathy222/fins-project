@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+// ✅ Προσθήκη τύπου Variants για το TypeScript
+import type { Variants } from "framer-motion";
 import "./LandingPage.css";
 import backgroundImage from "../assets/dark.jpg";
 import desktopFish from "../assets/Group 1.png";
@@ -10,8 +12,8 @@ interface LandingPageProps {
   onCtaClick: () => void;
 }
 
-// Animation Variants
-const containerVariants = {
+// ✅ Προσθήκη : Variants ώστε να μην βγάζει error στο build για το "spring"
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -22,7 +24,7 @@ const containerVariants = {
   },
 };
 
-const textItemVariants = {
+const textItemVariants: Variants = {
   hidden: { x: -30, opacity: 0 },
   visible: {
     x: 0,
