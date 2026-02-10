@@ -18,11 +18,19 @@ import SearchIcon from "@mui/icons-material/Search";
 import TuneIcon from "@mui/icons-material/Tune";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+// ============================================
+// PROXY CONFIGURATION
+// ============================================
 const buildApiUrl = (endpoint: string): string => {
-  // Αλλάζουμε το https σε http για να ταιριάζει με τον server του καθηγητή
-  const baseUrl = "http://demos.isl.ics.forth.gr/semantyfish-api/resources";
-  return `${baseUrl}${endpoint}`;
+  // Χρησιμοποιούμε το proxy server για να αποφύγουμε CORS issues
+  // Local development: http://localhost:3001/api
+  // Production: http://62.217.127.153:3001/api
+
+  const PROXY_URL =
+    import.meta.env.VITE_PROXY_URL || "http://62.217.127.153:3001/api";
+  return `${PROXY_URL}${endpoint}`;
 };
+
 interface TerminologyData {
   id: number;
   name: string;
