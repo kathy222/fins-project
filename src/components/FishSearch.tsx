@@ -411,6 +411,38 @@ export default function FishSearch({
     }
   };
 
+  // Helper: Convert common_name IDs to species codes
+  const convertCommonNameIdsToSpeciesCodes = async (
+    commonNameIds: number[],
+  ): Promise<number[]> => {
+    console.log(
+      "🔄 Converting common_name IDs to species codes:",
+      commonNameIds,
+    );
+    const speciesCodes: number[] = [];
+
+    for (const id of commonNameIds) {
+      try {
+        const response = await fetch(buildApiUrl(`/common_name/${id}`));
+        if (response.ok) {
+          const data = await response.json();
+          // FIX: No "data" wrapper! Direct access to species.species_code
+          if (data?.species?.species_code) {
+            speciesCodes.push(data.species.species_code);
+            console.log(
+              `  ✅ ID ${id} → species_code ${data.species.species_code}`,
+            );
+          }
+        }
+      } catch (error) {
+        console.error(`  ❌ Error converting ID ${id}:`, error);
+      }
+    }
+
+    console.log("✅ Final species codes:", speciesCodes);
+    return speciesCodes;
+  };
+
   const searchDatabase = async (searchQuery: string) => {
     setRandomFishList([]);
     setIsLoading(true);
@@ -421,120 +453,86 @@ export default function FishSearch({
     const numericId = parseInt(query);
     const isIdSearch = !isNaN(numericId) && numericId > 0;
 
-    // Helper to check if string contains Greek characters
-    const hasGreekChars = (str: string) =>
-      /[\u0370-\u03FF\u1F00-\u1FFF]/.test(str);
-
-    // Helper to convert common_name IDs to species codes
-    const convertCommonNameIdsToSpeciesCodes = async (
-      commonNameIds: number[],
-    ): Promise<number[]> => {
-      const speciesCodes: number[] = [];
-
-      for (const commonNameId of commonNameIds) {
-        try {
-          const response = await fetch(
-            buildApiUrl(`/common_name/${commonNameId}`),
-          );
-          if (response.ok) {
-            const data = await response.json();
-            // Extract species_code from the nested species object
-            if (data.species && data.species.species_code) {
-              speciesCodes.push(extractId(data.species.species_code));
-            }
-          }
-        } catch (e) {
-          console.error(
-            `Failed to get species code for common_name ID ${commonNameId}:`,
-            e,
-          );
-        }
-      }
-
-      return speciesCodes;
-    };
-
     try {
       let speciesCodeToFetch = 0;
       let resultsArray: number[] = [];
       const capitalizedQuery = capitalizeFirstLetter(query);
 
       let searchData = null;
+      let searchUrl = "";
+      let searchResponse: Response;
 
-      let searchUrl = buildApiUrl(
+      // === STEP 1: TRY COMMON NAMES FIRST (for ALL queries) ===
+      console.log(`🔍 Searching for: "${query}"`);
+      console.log("📋 Step 1: Trying common names...");
+
+      searchUrl = buildApiUrl(
         `/search_common_names?common_name=${encodeURIComponent(query)}`,
       );
-      let searchResponse = await fetch(searchUrl);
+      searchResponse = await fetch(searchUrl);
       searchData = searchResponse.ok ? await searchResponse.json() : null;
 
-      // Handle different response formats
-      if (searchData) {
-        if (searchData.ids && searchData.ids.length > 0) {
-          // Format: {ids: [123, 456]} - already species codes
-          resultsArray = searchData.ids.map((id: any) => extractId(id));
-        } else if (searchData.results && searchData.results.length > 0) {
-          // Format: {results: [{id: ..., name: "..."}, ...]} - common_name IDs
-          // ONLY convert for Greek names - English names should fall through to scientific search
-          if (hasGreekChars(query)) {
-            const commonNameIds = searchData.results.map((item: any) =>
-              extractId(item.id),
-            );
-            resultsArray =
-              await convertCommonNameIdsToSpeciesCodes(commonNameIds);
-          }
-          // For non-Greek, leave resultsArray empty to continue to scientific search
-        }
+      // FIX: Check for "results" array, not "ids"!
+      if (searchData && searchData.results && searchData.results.length > 0) {
+        console.log(
+          `✅ Found ${searchData.results.length} common_name results`,
+        );
+        // Extract IDs from results (LIMIT to first 20 for performance!)
+        const commonNameIds = searchData.results
+          .slice(0, 20)
+          .map((r: any) => r.id);
+        console.log("📋 Common name IDs (limited to 20):", commonNameIds);
+        // CONVERT to species codes
+        resultsArray = await convertCommonNameIdsToSpeciesCodes(commonNameIds);
       }
 
       if (resultsArray.length === 0) {
+        // Try capitalized version
+        console.log("📋 Trying capitalized...");
         searchUrl = buildApiUrl(
-          `/search_common_names?common_name=${encodeURIComponent(
-            capitalizedQuery,
-          )}`,
-        );
-        searchResponse = await fetch(searchUrl);
-        searchData = searchResponse.ok ? await searchResponse.json() : null;
-
-        // Handle different response formats
-        if (searchData) {
-          if (searchData.ids && searchData.ids.length > 0) {
-            // Format: {ids: [123, 456]} - already species codes
-            resultsArray = searchData.ids.map((id: any) => extractId(id));
-          } else if (searchData.results && searchData.results.length > 0) {
-            // Format: {results: [{id: ..., name: "..."}, ...]} - common_name IDs
-            // ONLY convert for Greek names - English names should fall through to scientific search
-            if (hasGreekChars(capitalizedQuery)) {
-              const commonNameIds = searchData.results.map((item: any) =>
-                extractId(item.id),
-              );
-              resultsArray =
-                await convertCommonNameIdsToSpeciesCodes(commonNameIds);
-            }
-            // For non-Greek, leave resultsArray empty to continue to scientific search
-          }
-        }
-      }
-
-      if (resultsArray.length === 0 && isIdSearch) {
-        speciesCodeToFetch = numericId;
-      }
-
-      if (resultsArray.length === 0 && !isIdSearch) {
-        // --- Search by Scientific Name ---
-        searchUrl = buildApiUrl(
-          `/search_species?scientific_name=${encodeURIComponent(
-            capitalizedQuery,
-          )}`,
+          `/search_common_names?common_name=${encodeURIComponent(capitalizedQuery)}`,
         );
         searchResponse = await fetch(searchUrl);
         searchData = searchResponse.ok ? await searchResponse.json() : null;
 
         if (searchData && searchData.results && searchData.results.length > 0) {
+          console.log(
+            `✅ Found ${searchData.results.length} common_name results (capitalized)`,
+          );
+          const commonNameIds = searchData.results
+            .slice(0, 20)
+            .map((r: any) => r.id);
+          console.log("📋 Common name IDs (limited to 20):", commonNameIds);
+          resultsArray =
+            await convertCommonNameIdsToSpeciesCodes(commonNameIds);
+        }
+      }
+
+      // === STEP 2: ID SEARCH ===
+      if (resultsArray.length === 0 && isIdSearch) {
+        console.log("🔢 Treating as ID search");
+        speciesCodeToFetch = numericId;
+      }
+
+      // === STEP 3: SCIENTIFIC NAME SEARCH (only if common names failed) ===
+      if (resultsArray.length === 0 && !isIdSearch) {
+        console.log("🔬 Step 3: Trying scientific name...");
+
+        searchUrl = buildApiUrl(
+          `/search_species?scientific_name=${encodeURIComponent(capitalizedQuery)}`,
+        );
+        searchResponse = await fetch(searchUrl);
+        searchData = searchResponse.ok ? await searchResponse.json() : null;
+
+        if (searchData && searchData.results && searchData.results.length > 0) {
+          console.log("✅ Found scientific results:", searchData.results);
           resultsArray = searchData.results;
         }
 
+        // === STEP 4: GENUS SEARCH ===
         if (resultsArray.length === 0) {
-          // --- Search by Genus Name ---
+          console.log("🧬 Step 4: Trying genus...");
+
           searchUrl = buildApiUrl(
             `/search_species?genus=${encodeURIComponent(capitalizedQuery)}`,
           );
@@ -546,6 +544,7 @@ export default function FishSearch({
             searchData.results &&
             searchData.results.length > 0
           ) {
+            console.log("✅ Found genus results:", searchData.results);
             resultsArray = searchData.results;
           }
         }
@@ -1212,7 +1211,7 @@ export default function FishSearch({
                 </Fade>
               )}
 
-              {/* Note: The main error display is now handled by the conditional block above */}
+              {/* */}
             </Box>
           </Box>
         </>
